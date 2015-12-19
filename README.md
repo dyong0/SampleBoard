@@ -1,4 +1,4 @@
-# SampleBoard
+Guestbook
 
 구현 스펙
   - 이메일, 비밀번호, 본문을 입력 받아 디비에 추가
