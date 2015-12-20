@@ -1,13 +1,21 @@
 package com.zoel.controllers;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +27,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.matchers.EndsWith;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -42,7 +48,7 @@ public class GuestbookControllerTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		
+
 		guestbookCaptor = ArgumentCaptor.forClass(Guestbook.class);
 	}
 
@@ -72,8 +78,21 @@ public class GuestbookControllerTest {
 		when(service.getAllGuestbooks()).thenReturn(guestbooks);
 
 		mockMvc.perform(get("/guestbookList"))
-		.andExpect(jsonPath("$.guestbooks[*].email", contains(guestbooks.get(0).getEmail(), guestbooks.get(1).getEmail())))
-		.andExpect(status().isOk());
+		.andExpect(status().isOk())
+		.andExpect(view().name("guestbookList"))
+		.andExpect(model().attribute("guestbooks", hasSize(2)))
+		.andExpect(model().attribute("guestbooks", hasItem(
+				allOf(
+						hasProperty("email", is(guestbooks.get(0).getEmail())),
+						hasProperty("body", is(guestbooks.get(0).getBody())),
+						hasProperty("password", is(guestbooks.get(0).getPassword()))
+					))))
+		.andExpect(model().attribute("guestbooks", hasItem(
+				allOf(
+						hasProperty("email", is(guestbooks.get(1).getEmail())),
+						hasProperty("body", is(guestbooks.get(1).getBody())),
+						hasProperty("password", is(guestbooks.get(1).getPassword()))
+					))));
 	}
 
 	@Test
@@ -89,16 +108,20 @@ public class GuestbookControllerTest {
 		when(service.getGuestbook()).thenReturn(gb);
 
 		mockMvc.perform(get("/guestbook/" + gb.getId()))
-		.andExpect(jsonPath("$.email", is(gb.getEmail())))
-		.andExpect(status().isOk());
+		.andExpect(status().isOk())
+		.andExpect(view().name("guestbook"))
+		.andExpect(model().attribute("email", is(gb.getEmail())));
 	}
 
 	@Test
 	public void getNotExistingGuestbook() throws Exception {
+		Long notExistingId = 1L;
+		
 		when(service.getGuestbook()).thenReturn(null);
 
-		mockMvc.perform(get("/guestbook/" + "1"))
-		.andExpect(status().isNotFound());
+		mockMvc.perform(get("/guestbook/" + notExistingId))
+		.andExpect(status().isNotFound())
+		.andExpect(redirectedUrl("/guestbookList"));
 	}
 	
 	@Test
@@ -114,18 +137,14 @@ public class GuestbookControllerTest {
 		when(service.createGuestbook(Matchers.any(Guestbook.class))).thenReturn(created);
 		
 		mockMvc.perform(put("/guestbook")
-				.content("{"
-						+ "\"email\":\"" + created.getEmail() + "\""
-						+ "\"body\":\"" + created.getBody() + "\""
-						+ "\"password\":\"" + created.getPassword() + "\""
-						+"}")
-				.contentType(MediaType.APPLICATION_JSON))
-		.andExpect(header().string("Location", Matchers.endsWith("/guestbook/" + created.getId())))
-		.andExpect(jsonPath("$.email", is(created.getEmail())))
-		.andExpect(status().isCreated());
+				.param("email", created.getEmail())
+				.param("body", created.getBody())
+				.param("password", created.getPassword()))
+		.andExpect(status().isCreated())
+		.andExpect(redirectedUrl("/guestbook/" + created.getId()));
 		
 		verify(service).createGuestbook(guestbookCaptor.capture());
-		assertEquals("helloworld", guestbookCaptor.getValue().getBody());
+		assertEquals(created.getBody(), guestbookCaptor.getValue().getBody());
 	}
 	
 	@Test
@@ -141,14 +160,11 @@ public class GuestbookControllerTest {
 		when(service.updateGuestbook(updated)).thenReturn(updated);
 		
 		mockMvc.perform(post("/guestbook/" + updated.getId())
-				.content("{"
-						+ "\"email\":\"" + updated.getEmail() + "\""
-						+ "\"body\":\"" + updated.getBody() + "\""
-						+ "\"password\":\"" + updated.getPassword() + "\""
-						+"}")
-				.contentType(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.body", is(updated.getBody())))
-		.andExpect(status().isOk());		
+				.param("email", updated.getEmail())
+				.param("body", updated.getBody())
+				.param("password", updated.getPassword()))
+		.andExpect(status().isOk())
+		.andExpect(redirectedUrl("/guestbook/" + updated.getId()));
 	}
 	
 	@Test
@@ -163,14 +179,14 @@ public class GuestbookControllerTest {
 		
 		when(service.updateGuestbook(Matchers.any(Guestbook.class))).thenReturn(null);
 		
+		
 		mockMvc.perform(post("/guestbook/" + gb.getId())
-				.content("{"
-						+ "\"email\":\"" + gb.getEmail() + "\""
-						+ "\"body\":\"" + gb.getBody() + "\""
-						+ "\"password\":\"" + gb.getPassword() + "\""
-						+"}")
-				.contentType(MediaType.APPLICATION_JSON))
-		.andDo(print())
-		.andExpect(status().isNotFound());		
+				.param("email", gb.getEmail())
+				.param("body", gb.getBody())
+				.param("password", gb.getPassword()))
+		.andExpect(status().isNotFound())
+		.andExpect(redirectedUrl("/guestbookList"));
 	}
+	
+	
 }
