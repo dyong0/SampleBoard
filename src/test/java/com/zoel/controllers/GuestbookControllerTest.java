@@ -78,7 +78,7 @@ public class GuestbookControllerTest {
 
 		when(service.getAllGuestbooks()).thenReturn(guestbooks);
 
-		mockMvc.perform(get("/guestbookList"))
+		mockMvc.perform(get("/guestbooks"))
 		.andExpect(status().isOk())
 		.andExpect(view().name("guestbookList"))
 		.andExpect(model().attribute("guestbooks", hasSize(2)))
@@ -106,9 +106,9 @@ public class GuestbookControllerTest {
 		gb.setCreatedDate(LocalDateTime.now());
 		gb.setModifiedDate(LocalDateTime.now());
 
-		when(service.getGuestbook()).thenReturn(gb);
+		when(service.getGuestbook(gb.getId())).thenReturn(gb);
 
-		mockMvc.perform(get("/guestbook/" + gb.getId()))
+		mockMvc.perform(get("/guestbooks/" + gb.getId()))
 		.andExpect(status().isOk())
 		.andExpect(view().name("guestbook"))
 		.andExpect(model().attribute("email", is(gb.getEmail())));
@@ -118,7 +118,7 @@ public class GuestbookControllerTest {
 	public void getNotExistingGuestbook() throws Exception {
 		Long notExistingId = 1L;
 		
-		when(service.getGuestbook()).thenReturn(null);
+		when(service.getGuestbook(notExistingId)).thenReturn(null);
 
 		mockMvc.perform(get("/guestbook/" + notExistingId))
 		.andExpect(status().isNotFound())
@@ -135,9 +135,9 @@ public class GuestbookControllerTest {
 		created.setCreatedDate(LocalDateTime.now());
 		created.setModifiedDate(LocalDateTime.now());
 		
-		when(service.createGuestbook(Matchers.any(Guestbook.class))).thenReturn(created);
+		when(service.createGuestbook(Matchers.any(Guestbook.class))).thenReturn(1L);
 		
-		mockMvc.perform(put("/guestbook")
+		mockMvc.perform(put("/guestbooks")
 				.param("email", created.getEmail())
 				.param("body", created.getBody())
 				.param("password", created.getPassword()))
@@ -158,9 +158,9 @@ public class GuestbookControllerTest {
 		updated.setCreatedDate(LocalDateTime.now());
 		updated.setModifiedDate(LocalDateTime.now());
 		
-		when(service.updateGuestbook(updated)).thenReturn(updated);
+		when(service.updateGuestbook(updated)).thenReturn(1L);
 		
-		mockMvc.perform(post("/guestbook/" + updated.getId())
+		mockMvc.perform(post("/guestbooks/" + updated.getId())
 				.param("email", updated.getEmail())
 				.param("body", updated.getBody())
 				.param("password", updated.getPassword()))
@@ -181,7 +181,7 @@ public class GuestbookControllerTest {
 		when(service.updateGuestbook(Matchers.any(Guestbook.class))).thenReturn(null);
 		
 		
-		mockMvc.perform(post("/guestbook/" + gb.getId())
+		mockMvc.perform(post("/guestbooks/" + gb.getId())
 				.param("email", gb.getEmail())
 				.param("body", gb.getBody())
 				.param("password", gb.getPassword()))
