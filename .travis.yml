@@ -1,3 +1,36 @@
 language: java
+
 jdk:
   - oraclejdk8
+
+test:
+  adapter: mysql2
+  database: guestbook
+  username: root
+  encoding: utf8
+  
+before_script:
+  - mysql -e "USE mysql;
+              UPDATE user SET password=PASSWORD('dyong')
+              WHERE user='root';
+              FLUSH PRIVILEGES;
+  
+              CREATE DATABASE guestbook;
+              
+              USE guestbook;
+              
+              CREATE TABLE guestbook (
+                id int(11) NOT NULL AUTO_INCREMENT,
+                email varchar(254) NOT NULL COMMENT '이메일',
+                password varchar(64) NOT NULL COMMENT '비밀번호',
+                body varchar(4096) NOT NULL COMMENT '본문',
+                createdDate datetime NOT NULL COMMENT '작성시간',
+                modifiedDate datetime NOT NULL COMMENT '수정시간',
+                PRIMARY KEY (`id`)
+              ) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8;"
+              
+after_failure:
+  - mysql -e "show databases;"
+  
+notifications:
+  - email: false
