@@ -1,14 +1,14 @@
 package com.zoel.vo;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Guestbook {
 	private Long id;
 	private String email;
 	private String password;
 	private String body;
-	private LocalDateTime createdDate;
-	private LocalDateTime modifiedDate;
+	private Date createdDate;
+	private Date modifiedDate;
 
 	public Long getId() {
 		return id;
@@ -42,19 +42,19 @@ public class Guestbook {
 		this.body = body;
 	}
 
-	public LocalDateTime getCreatedDate() {
+	public Date getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(LocalDateTime createdDate) {
+	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 
-	public LocalDateTime getModifiedDate() {
+	public Date getModifiedDate() {
 		return modifiedDate;
 	}
 
-	public void setModifiedDate(LocalDateTime modifiedDate) {
+	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
 }

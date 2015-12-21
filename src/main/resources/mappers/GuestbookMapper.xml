@@ -11,7 +11,7 @@
   </select>
   
   <insert id="createGuestbook" parameterType="Guestbook" useGeneratedKeys="true" keyProperty="id">
-  	INSERT INTO guestbook (body, email, password, created, modified)
-  		VALUES (#{body}, #{email}, #{password}, NOW(), NOW())
+  	INSERT INTO guestbook (body, email, password, createdDate, modifiedDate)
+  		VALUES (#{body}, #{email}, #{password}, #{createdDate}, #{modifiedDate})
   </insert>
 </mapper>

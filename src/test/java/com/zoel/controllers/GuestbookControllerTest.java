@@ -12,12 +12,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
@@ -63,8 +63,8 @@ public class GuestbookControllerTest {
 		gb.setEmail("helloworld@naver.com");
 		gb.setBody("helloworld");
 		gb.setPassword("helloworld");
-		gb.setCreatedDate(LocalDateTime.now());
-		gb.setModifiedDate(LocalDateTime.now());
+		gb.setCreatedDate(new Date(System.currentTimeMillis()));
+		gb.setModifiedDate(new Date(System.currentTimeMillis()));
 		guestbooks.add(gb);
 
 		gb = new Guestbook();
@@ -72,8 +72,8 @@ public class GuestbookControllerTest {
 		gb.setEmail("hiworld@naver.com");
 		gb.setBody("hiworld");
 		gb.setPassword("hiworld");
-		gb.setCreatedDate(LocalDateTime.now());
-		gb.setModifiedDate(LocalDateTime.now());
+		gb.setCreatedDate(new Date(System.currentTimeMillis()));
+		gb.setModifiedDate(new Date(System.currentTimeMillis()));
 		guestbooks.add(gb);
 
 		when(service.getAllGuestbooks()).thenReturn(guestbooks);
@@ -103,8 +103,8 @@ public class GuestbookControllerTest {
 		gb.setEmail("helloworld@naver.com");
 		gb.setBody("helloworld");
 		gb.setPassword("helloworld");
-		gb.setCreatedDate(LocalDateTime.now());
-		gb.setModifiedDate(LocalDateTime.now());
+		gb.setCreatedDate(new Date(System.currentTimeMillis()));
+		gb.setModifiedDate(new Date(System.currentTimeMillis()));
 
 		when(service.getGuestbook(gb.getId())).thenReturn(gb);
 
@@ -132,8 +132,8 @@ public class GuestbookControllerTest {
 		created.setEmail("helloworld@naver.com");
 		created.setBody("helloworld");
 		created.setPassword("helloworld");
-		created.setCreatedDate(LocalDateTime.now());
-		created.setModifiedDate(LocalDateTime.now());
+		created.setCreatedDate(new Date(System.currentTimeMillis()));
+		created.setModifiedDate(new Date(System.currentTimeMillis()));
 		
 		when(service.createGuestbook(Matchers.any(Guestbook.class))).thenReturn(1L);
 		
@@ -155,8 +155,8 @@ public class GuestbookControllerTest {
 		updated.setEmail("helloworld@naver.com");
 		updated.setBody("helloworld");
 		updated.setPassword("helloworld");
-		updated.setCreatedDate(LocalDateTime.now());
-		updated.setModifiedDate(LocalDateTime.now());
+		updated.setCreatedDate(new Date(System.currentTimeMillis()));
+		updated.setModifiedDate(new Date(System.currentTimeMillis()));
 		
 		when(service.updateGuestbook(updated)).thenReturn(1L);
 		
@@ -175,8 +175,8 @@ public class GuestbookControllerTest {
 		gb.setEmail("helloworld@naver.com");
 		gb.setBody("helloworld");
 		gb.setPassword("helloworld");
-		gb.setCreatedDate(LocalDateTime.now());
-		gb.setModifiedDate(LocalDateTime.now());
+		gb.setCreatedDate(new Date(System.currentTimeMillis()));
+		gb.setModifiedDate(new Date(System.currentTimeMillis()));
 		
 		when(service.updateGuestbook(Matchers.any(Guestbook.class))).thenReturn(null);
 		

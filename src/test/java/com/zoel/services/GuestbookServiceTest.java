@@ -1,9 +1,11 @@
 package com.zoel.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDateTime;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
@@ -15,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.gson.Gson;
 import com.zoel.vo.Guestbook;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -38,8 +41,8 @@ public class GuestbookServiceTest {
 		gb.setEmail("helloworld@naver.com");
 		gb.setBody("helloworld");
 		gb.setPassword("helloworld");
-		gb.setCreatedDate(LocalDateTime.now());
-		gb.setModifiedDate(LocalDateTime.now());
+		gb.setCreatedDate(new Date(System.currentTimeMillis()));
+		gb.setModifiedDate(new Date(System.currentTimeMillis()));
 		guestbooks.add(gb);
 		service.createGuestbook(gb);
 
@@ -47,8 +50,8 @@ public class GuestbookServiceTest {
 		gb.setEmail("hiworld@naver.com");
 		gb.setBody("hiworld");
 		gb.setPassword("hiworld");
-		gb.setCreatedDate(LocalDateTime.now());
-		gb.setModifiedDate(LocalDateTime.now());
+		gb.setCreatedDate(new Date(System.currentTimeMillis()));
+		gb.setModifiedDate(new Date(System.currentTimeMillis()));
 		guestbooks.add(gb);
 		service.createGuestbook(gb);
 	}
@@ -58,6 +61,16 @@ public class GuestbookServiceTest {
 	public void getAllGuestbooks() {
 		List<Guestbook> guestbooksFound = service.getAllGuestbooks();
 
-		assert(guestbooksFound.containsAll(guestbooks));
+		Gson gson = new Gson();
+		StringBuilder sbExpected = new StringBuilder();
+		StringBuilder sbActual = new StringBuilder();
+		for (Guestbook gb : guestbooksFound) {
+			sbExpected.append(gson.toJson(gb).toString());
+		}
+		for (Guestbook gb : guestbooks) {			
+			sbActual.append(gson.toJson(gb).toString());
+		}
+		
+		assertTrue(sbExpected.toString().equals(sbActual.toString()));
 	}
 }

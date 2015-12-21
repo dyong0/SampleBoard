@@ -26,11 +26,8 @@ before_script:
                 body varchar(4096) NOT NULL COMMENT '본문',
                 createdDate datetime NOT NULL COMMENT '작성시간',
                 modifiedDate datetime NOT NULL COMMENT '수정시간',
-                PRIMARY KEY (`id`)
+                PRIMARY KEY (id)
               ) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8;"
-              
-after_failure:
-  - mysql -e "show databases;"
   
 notifications:
   - email: false
