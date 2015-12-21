@@ -30,6 +30,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.zoel.services.GuestbookService;
 import com.zoel.vo.Guestbook;
 
 public class GuestbookControllerTest {
