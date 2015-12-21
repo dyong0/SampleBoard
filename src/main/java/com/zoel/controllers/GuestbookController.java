@@ -11,12 +11,13 @@ import com.zoel.services.GuestbookService;
 import com.zoel.vo.Guestbook;
 
 @Controller
+@RequestMapping("/guestbooks")
 public class GuestbookController {
 	
 	@Autowired
 	GuestbookService guestbookService;
 	
-	@RequestMapping("/guestbookList")
+	@RequestMapping
 	public ModelAndView guestbookList(){
 		List<Guestbook> guestbooks = guestbookService.getAllGuestbooks();
 		
