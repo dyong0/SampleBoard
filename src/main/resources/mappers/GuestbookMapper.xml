@@ -4,10 +4,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zoel.services.mappers.GuestbookMapper">
   <select id="selectGuestbook" parameterType="long" resultType="Guestbook">
-    select * from guestbook
+    SELECT * FROM guestbook
     <if test='id != null'> 
     	WHERE id = #{id}
-    </if>    
+    </if>
+    ORDER BY modifiedDate DESC
   </select>
   
   <insert id="createGuestbook" parameterType="Guestbook" useGeneratedKeys="true" keyProperty="id">

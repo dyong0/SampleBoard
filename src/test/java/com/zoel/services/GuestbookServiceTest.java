@@ -32,7 +32,7 @@ public class GuestbookServiceTest {
 	@Before
 	@Transactional
 	@Rollback
-	public void setup() {
+	public void setup() throws InterruptedException {
 		guestbooks = new ArrayList<Guestbook>();
 		
 		Guestbook gb = null;
@@ -45,6 +45,9 @@ public class GuestbookServiceTest {
 		gb.setModifiedDate(new Date(System.currentTimeMillis()));
 		guestbooks.add(gb);
 		service.createGuestbook(gb);
+
+		//delay to make different time data for each guestbook
+		Thread.sleep(1000);
 
 		gb = new Guestbook();
 		gb.setEmail("hiworld@naver.com");
@@ -60,7 +63,13 @@ public class GuestbookServiceTest {
 	@Transactional
 	public void getAllGuestbooks() {
 		List<Guestbook> guestbooksFound = service.getAllGuestbooks();
+		
+		//sort the original guestbook
+		guestbooks.stream().sorted((lhs, rhs)->{
+			return lhs.getModifiedDate().compareTo(rhs.getModifiedDate());
+		});
 
+		//build texts that represent each guestbook list
 		Gson gson = new Gson();
 		StringBuilder sbExpected = new StringBuilder();
 		StringBuilder sbActual = new StringBuilder();
