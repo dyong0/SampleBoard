@@ -10,7 +10,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.zoel.services.GuestbookService;
 import com.zoel.vo.Guestbook;
@@ -43,7 +43,8 @@ public class GuestbookControllerTest {
 
 	MockMvc mockMvc;
 
-	private ArgumentCaptor<Guestbook> guestbookCaptor;
+	ArgumentCaptor<Guestbook> guestbookCaptor;
+	
 
 	@Before
 	public void setup() {
@@ -80,7 +81,7 @@ public class GuestbookControllerTest {
 
 		mockMvc.perform(get("/guestbooks"))
 		.andExpect(status().isOk())
-		.andExpect(view().name("guestbookList"))
+		.andExpect(view().name("guestbook"))
 		.andExpect(model().attribute("guestbooks", hasSize(2)))
 		.andExpect(model().attribute("guestbooks", hasItem(
 				allOf(
@@ -95,38 +96,9 @@ public class GuestbookControllerTest {
 						hasProperty("password", is(guestbooks.get(1).getPassword()))
 					))));
 	}
-
-	@Test
-	public void getExistingGuestbook() throws Exception {
-		Guestbook gb = new Guestbook();
-		gb.setId(1L);
-		gb.setEmail("helloworld@naver.com");
-		gb.setBody("helloworld");
-		gb.setPassword("helloworld");
-		gb.setCreatedDate(new Date(System.currentTimeMillis()));
-		gb.setModifiedDate(new Date(System.currentTimeMillis()));
-
-		when(service.getGuestbook(gb.getId())).thenReturn(gb);
-
-		mockMvc.perform(get("/guestbooks/" + gb.getId()))
-		.andExpect(status().isOk())
-		.andExpect(view().name("guestbook"))
-		.andExpect(model().attribute("email", is(gb.getEmail())));
-	}
-
-	@Test
-	public void getNotExistingGuestbook() throws Exception {
-		Long notExistingId = 1L;
-		
-		when(service.getGuestbook(notExistingId)).thenReturn(null);
-
-		mockMvc.perform(get("/guestbook/" + notExistingId))
-		.andExpect(status().isNotFound())
-		.andExpect(redirectedUrl("/guestbookList"));
-	}
 	
 	@Test
-	public void createGuestbook() throws Exception{
+	public void createGuestbookWithValidEmail() throws Exception{
 		Guestbook created = new Guestbook();
 		created.setId(1L);
 		created.setEmail("helloworld@naver.com");
@@ -135,17 +107,31 @@ public class GuestbookControllerTest {
 		created.setCreatedDate(new Date(System.currentTimeMillis()));
 		created.setModifiedDate(new Date(System.currentTimeMillis()));
 		
-		when(service.createGuestbook(Matchers.any(Guestbook.class))).thenReturn(1L);
-		
-		mockMvc.perform(put("/guestbooks")
+		mockMvc.perform(post("/guestbooks")
 				.param("email", created.getEmail())
 				.param("body", created.getBody())
 				.param("password", created.getPassword()))
-		.andExpect(status().isCreated())
-		.andExpect(redirectedUrl("/guestbook/" + created.getId()));
+		.andExpect(redirectedUrl("/guestbooks"));
 		
 		verify(service).createGuestbook(guestbookCaptor.capture());
 		assertEquals(created.getBody(), guestbookCaptor.getValue().getBody());
+	}
+	
+	@Test
+	public void createGuestbookWithInvalidEmail() throws Exception{
+		Guestbook created = new Guestbook();
+		created.setId(1L);
+		created.setEmail("rthndfnom");
+		created.setBody("helloworld");
+		created.setPassword("helloworld");
+		created.setCreatedDate(new Date(System.currentTimeMillis()));
+		created.setModifiedDate(new Date(System.currentTimeMillis()));
+		
+		mockMvc.perform(post("/guestbooks")
+				.param("email", created.getEmail())
+				.param("body", created.getBody())
+				.param("password", created.getPassword()))
+		.andExpect(status().isConflict());
 	}
 	
 	@Test
@@ -158,14 +144,13 @@ public class GuestbookControllerTest {
 		updated.setCreatedDate(new Date(System.currentTimeMillis()));
 		updated.setModifiedDate(new Date(System.currentTimeMillis()));
 		
-		when(service.updateGuestbook(updated)).thenReturn(1L);
+		when(service.validateOwner(Matchers.any(Guestbook.class))).thenReturn(true);
 		
 		mockMvc.perform(post("/guestbooks/" + updated.getId())
 				.param("email", updated.getEmail())
 				.param("body", updated.getBody())
 				.param("password", updated.getPassword()))
-		.andExpect(status().isOk())
-		.andExpect(redirectedUrl("/guestbook/" + updated.getId()));
+		.andExpect(redirectedUrl("/guestbooks"));
 	}
 	
 	@Test
@@ -178,15 +163,14 @@ public class GuestbookControllerTest {
 		gb.setCreatedDate(new Date(System.currentTimeMillis()));
 		gb.setModifiedDate(new Date(System.currentTimeMillis()));
 		
-		when(service.updateGuestbook(Matchers.any(Guestbook.class))).thenReturn(null);
-		
+		when(service.validateOwner(Matchers.any(Guestbook.class))).thenReturn(false);
 		
 		mockMvc.perform(post("/guestbooks/" + gb.getId())
 				.param("email", gb.getEmail())
 				.param("body", gb.getBody())
 				.param("password", gb.getPassword()))
-		.andExpect(status().isNotFound())
-		.andExpect(redirectedUrl("/guestbookList"));
+		
+		.andExpect(status().isNotFound());
 	}
 	
 	
