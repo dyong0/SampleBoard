@@ -21,11 +21,11 @@ before_script:
               
               CREATE TABLE guestbook (
                 id int(11) NOT NULL AUTO_INCREMENT,
-                email varchar(254) NOT NULL COMMENT '¿Ã∏ﬁ¿œ',
-                password varchar(64) NOT NULL COMMENT '∫Òπ–π¯»£',
-                body varchar(4096) NOT NULL COMMENT '∫ªπÆ',
-                createdDate datetime NOT NULL COMMENT '¿€º∫Ω√∞£',
-                modifiedDate datetime NOT NULL COMMENT 'ºˆ¡§Ω√∞£',
+                email varchar(254) NOT NULL COMMENT 'Ïù¥Î©îÏùº',
+                password varchar(256) NOT NULL COMMENT 'ÎπÑÎ∞ÄÎ≤àÌò∏',
+                body varchar(4096) NOT NULL COMMENT 'ÎÇ¥Ïö©',
+                createdDate datetime NOT NULL COMMENT 'ÏûëÏÑ±ÏãúÍ∞Ñ',
+                modifiedDate datetime NOT NULL COMMENT 'ÏµúÍ∑ºÏàòÏ†ïÏãúÍ∞Ñ',
                 PRIMARY KEY (id)
               ) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8;"
   
