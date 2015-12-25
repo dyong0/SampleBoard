@@ -2,6 +2,7 @@ package com.zoel.services;
 
 import java.util.List;
 
+import com.zoel.exceptions.DBWriteFailureException;
 import com.zoel.vo.Guestbook;
 
 public interface GuestbookService {
@@ -10,8 +11,10 @@ public interface GuestbookService {
 
 	Guestbook getGuestbook(Long id);
 
-	Long createGuestbook(Guestbook guestbook);
+	void createGuestbook(Guestbook guestbook) throws DBWriteFailureException;
 
-	Long updateGuestbook(Guestbook guestbook);
+	void updateGuestbook(Guestbook guestbook) throws DBWriteFailureException;
+
+	boolean validateOwner(Guestbook guestbook);
 
 }

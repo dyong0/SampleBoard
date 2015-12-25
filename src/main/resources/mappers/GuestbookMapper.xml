@@ -5,14 +5,19 @@
 <mapper namespace="com.zoel.services.mappers.GuestbookMapper">
   <select id="selectGuestbook" parameterType="long" resultType="Guestbook">
     SELECT * FROM guestbook
-    <if test='id != null'> 
-    	WHERE id = #{id}
+    <if test='value != null'> 
+    	WHERE id = #{value}
     </if>
-    ORDER BY modifiedDate DESC
+    ORDER BY createdDate DESC
   </select>
   
   <insert id="createGuestbook" parameterType="Guestbook" useGeneratedKeys="true" keyProperty="id">
   	INSERT INTO guestbook (body, email, password, createdDate, modifiedDate)
-  		VALUES (#{body}, #{email}, #{password}, #{createdDate}, #{modifiedDate})
+  		VALUES (#{body}, #{email}, #{password}, now(), now())
   </insert>
+  
+  <update id="updateGuestbook" parameterType="Guestbook">
+  	UPDATE guestbook SET body=#{body}, modifiedDate=now()
+  		WHERE id = #{id}
+  </update>
 </mapper>
