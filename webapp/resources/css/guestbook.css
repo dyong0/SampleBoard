@@ -1,0 +1,198 @@
+#guestbook {
+	background: rgb(61, 79, 93);
+	height: 100%;
+}
+
+body {
+	min-width:600px;
+	max-width: 800px;
+	display: block;
+	margin: 0 auto;
+	position: relative;
+	background: none white;
+	padding: 0px 2em;
+	overflow-y:auto;
+	min-height: 100%;
+}
+
+#title{
+    font-size: 2.3em;
+    font-weight: bold;
+    padding-top: 1.5em;
+    margin-top: 0;
+}
+#title a,
+#title a:hover{
+	color : inherit;
+	text-decoration:none;
+}
+
+#toggleNewGuestbookView {
+    position: absolute;
+    right: 2.6em;
+    top: 4.3em;
+}
+
+#newGuestbookView {
+    display: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0.6em;
+    margin-bottom:1.5em;
+}
+#newGuestbookView .inp-body{
+    display: block;
+    width: 100%;
+    margin: 0;
+    margin-bottom: 0.5em;
+    padding: 0;
+    padding-bottom: 0.1em;
+    border: 0 none;
+    border-bottom: 1px solid rgb(221, 221, 221);
+    outline: none;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#newGuestbookView .footer{
+	text-align:right;	
+}
+
+#newGuestbookView .inp-body:focus,
+#newGuestbookView .inp-email:focus,
+#newGuestbookView .inp-password:focus{
+	border-bottom-color: rgb(164, 204, 249);
+}
+#newGuestbookView label{
+	font-size:75%;
+}
+#newGuestbookView .inp-email,
+#newGuestbookView .inp-password{
+	display:inline-block;
+	border:0 none;
+	font-size:75%;
+	outline:none;
+	border-bottom: 1px solid rgb(221, 221, 221);
+}
+#newGuestbookView .inp-email.invalid{
+	color:red;
+}
+#newGuestbookView .btn-submit{
+	display:inline-block;
+	margin-left: 1.5em;
+}
+
+#guestbookList{
+	padding-bottom: 3em;
+}
+
+#guestbookList .post {
+    position: relative;
+    padding: 0.6em 0.6em 0.6em;
+    border-bottom: 1px solid #eee;
+    margin-bottom:1.0em;
+}
+#guestbookList .post.locked{
+	border:1px dashed rgb(61, 146, 201);
+	background: rgb(210, 228, 243);
+}
+#guestbookList .post.locked .body{
+	color:#666;
+}
+
+#guestbookList .body {
+	font-size: 1.2em;
+	font-weight: bold;
+	display: block;
+	overflow: hidden;//
+	padding:0.5em 50px 0.5em 0;
+	padding-right: 50px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-bottom: 0.3em;
+	padding: 0.5em 0;
+	padding-right: 50px;
+	min-height: 1.2em;
+}
+
+#guestbookList .email a, 
+#guestbookList .email a:hover {
+	color: rgb(61, 146, 201);
+	font-size: 75%;
+	text-decoration: none;
+}
+
+#guestbookList .email a:hover {
+	color: rgb(61, 146, 251);
+}
+
+#guestbookList .by, 
+#guestbookList .created-date, 
+#guestbookList .modified-date {
+	color: #999;
+	font-size: 75%;
+}
+
+#guestbookList .btn-modify {
+    background: none;
+    border: 0 none;
+    outline: none;
+    color: #666;
+}
+#guestbookList .btn-modify:hover{
+	color: rgb(61, 146, 251);
+}
+
+
+#modifyGuestbookView {
+    display: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0.6em;
+    margin-top: -1em;
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+#modifyGuestbookView .inp-body{
+    display: block;
+    width: 100%;
+    margin: 0;
+    margin-bottom: 0.5em;
+    padding: 0;
+    padding-bottom: 0.1em;
+    border: 0 none;
+    border-bottom: 1px solid rgb(221, 221, 221);
+    outline: none;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#modifyGuestbookView .footer{
+	text-align:right;	
+}
+
+#modifyGuestbookView .inp-body:focus,
+#modifyGuestbookView .inp-password:focus{
+	border-bottom-color: rgb(164, 204, 249);
+}
+#modifyGuestbookView label{
+	font-size:75%;
+}
+
+#modifyGuestbookView .inp-id,
+#modifyGuestbookView .inp-email{
+	display:none;
+}
+
+#modifyGuestbookView .inp-password{
+	display:inline-block;
+	border:0 none;
+	font-size:75%;
+	outline:none;
+	border-bottom: 1px solid rgb(221, 221, 221);
+}
+#modifyGuestbookView .btn-submit{
+	display:inline-block;
+	margin-left:1.5em;
+}
