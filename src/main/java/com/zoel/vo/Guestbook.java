@@ -57,4 +57,28 @@ public class Guestbook {
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Guestbook))
+			return false;
+		
+		Guestbook other = (Guestbook) o;
+		
+		if(other.email == null || this.email == null
+			|| other.password == null || this.password == null
+			|| other.body == null || this.body == null
+			|| other.createdDate == null || this.createdDate == null
+			|| other.modifiedDate == null || this.modifiedDate == null){
+			
+			return false;
+		}
+		
+		return other.id.equals(this.id) 
+				&& other.email.equals(this.email)
+				&& other.password.equals(this.password)
+				&& other.body.equals(this.body)
+				&& other.createdDate.equals(this.createdDate)
+				&& other.modifiedDate.equals(this.modifiedDate);
+	}
 }
