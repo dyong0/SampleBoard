@@ -19,13 +19,13 @@
 	<button id="toggleNewGuestbookView" class="button-success button-small pure-button">새 방명록</button>
 	<div id="newGuestbookView">
 		<form method="post" action="./guestbooks">
-				<input class="inp-body" type="text" name="body"/>
-				<div class='footer'>
-					<label>메일 : </label><input class="inp-email" type="text" name="email" placeholder="myemail@email.com"/> 
-					<label>비밀번호 : </label><input class="inp-password" type="password" name="password"/> 
-					<button class="btn-submit button-success button-small pure-button" type="submit">등록</button>
-					<button class="btn-cancel button-basic button-small pure-button" type="button">취소</button>
-				</div>
+			<input class="inp-body" type="text" name="body"/>
+			<div class='footer'>
+				<label>메일 : </label><input class="inp-email" type="text" name="email" placeholder="myemail@email.com"/> 
+				<label>비밀번호 : </label><input class="inp-password" type="password" name="password"/> 
+				<button class="btn-submit button-success button-small pure-button" type="submit">등록</button>
+				<button class="btn-cancel button-basic button-small pure-button" type="button">취소</button>
+			</div>
 		</form>
 	</div>
 
@@ -45,14 +45,14 @@
 
 <div id="modifyGuestbookView">
 	<form method="post" action="./guestbooks/-1">
-			<input class="inp-body" type="text" name="body"/>
-			<div class="footer">
-				<input class="inp-id" type="text" name="id"/><!-- for checking auth -->
-				<input class="inp-email" type="text" name="email"/><!-- for checking auth -->
-				<label>비밀번호 : </label><input class="inp-password" type="password" name="password"/> <!-- for checking auth -->
-				<button class="btn-submit button-success button-small pure-button" type="submit">수정</button>
-				<button class="btn-cancel button-basic button-small pure-button" type="button">취소</button>
-			</div>
+		<input class="inp-body" type="text" name="body"/>
+		<div class="footer">
+			<input class="inp-id" type="text" name="id"/><!-- for checking auth -->
+			<input class="inp-email" type="text" name="email"/><!-- for checking auth -->
+			<label>비밀번호 : </label><input class="inp-password" type="password" name="password"/> <!-- for checking auth -->
+			<button class="btn-submit button-success button-small pure-button" type="submit">수정</button>
+			<button class="btn-cancel button-basic button-small pure-button" type="button">취소</button>
+		</div>
 	</form>
 </div>
 
